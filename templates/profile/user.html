@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>About Me</title>
+{% endblock %}
+
+{% block page_header %}
+	<div class="page-haeder">
+		<h2> {{ user.username }}</h2>
+		{% if current_user.is_authenticated %}
+<h4><a href="{{ url_for('profile.info') }}"><span class="label label-primary">Edit</span></a></h4>
+{% endif %}
+	</div>
+{% endblock %}
+{% block content %}
+    <div class="well well-lg">
+	<p>
+	   <img src="{{user.avatar(150) }}"><br>
+	    Username: {{ user.username}}</p>
+	<p>Email: {{ user.email }}</p>
+	<p>About Me<br>
+		{{ user.html_content }}</p>
+    </div>
+{% endblock %}
+

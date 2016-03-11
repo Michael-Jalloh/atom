@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% import "_forms.html" as forms %}
+
+{% block title %}
+<title>{{post.title}}</title>
+{% endblock %}
+{% block page_header %}
+	<div class="page-header">
+		<h2> {{ post.title }}</h2>
+	</div>
+{% endblock %}
+
+{% block content %}
+	<div class="well well-lg">
+	<p>{{ post.html_content }}<p>
+	<p>{{ post.timestamp.strftime('%H:%M %Y-%m-%d') }}</p>
+	<p><h4><a href="{{ url_for('profile.profile') }}"><span class="label label-default">author</span></a></h4> </p>
+	</div>
+	<hr>
+	<h4>Comments</h4>
+	{% if post.comments %}
+
+	    {% for comment in post.comments %}
+	    <div class="well well-sm">
+		<table>
+			<tr valign="top">
+				<td><img src="{{ comment.avatar(50) }}"></td>
+				<td>
+		<p><strong><span class="label label-default">{{ comment.author }}</span></strong><span class="label label-default">on {{ comment.timestamp.strftime('%H:%M %Y-%m-%d') }}</span></p>
+			<p>{{ comment.content }}</p></td>
+			</tr>
+		</table>
+		{% if current_user.is_authenticated %}
+			<a class="btn btn-default" href="{{ url_for('posts.delete',slug=post.slug, comment=comment.id) }}">Delete</a>
+		{% endif %}
+		</div>
+	    {% endfor %}
+	{% endif %}	
+	<hr>
+	<h5>Add a comment</h5>
+	<form action="." method="post">
+		{{ forms.render(form) }}
+		<div class="actions">
+			<input type="submit" class="btn btn-primary" value="comment">
+		</div>
+	</form>
+{% endblock %}
+		

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% import "_forms_admin.html"as forms %}
+
+{% block title %}
+{% if create %}
+	<title>Add new post</title>
+{% else %}
+	<title>Edit post</title>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+  <h2>
+	{% if create%}
+	Add New Post
+	{% else %}
+	Edit Post
+	{% endif %}
+  </h2>
+
+<form action="?{{ request.query_string }}" method="post">
+	{{ forms.render(form) }}
+	<div class="actions">
+	  <input type="submit" class="btn btn-primary" value="save">
+	  <a href="{{ url_for('admin.index') }}" class="btn btn-default">Cancel</a>
+	</div>
+</form>
+{% endblock %}

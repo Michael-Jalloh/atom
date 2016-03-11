@@ -1,0 +1,8 @@
+flask
+flask-login
+flask-peewee
+flask-wtf
+wtforms
+flask-script
+uwsgi
+markdown

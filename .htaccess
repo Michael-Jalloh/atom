@@ -1,0 +1,3 @@
+<FilesMatch "\.(sqlite|sdb|db|s3db)$">
+Deny from all
+</FilesMatch>
