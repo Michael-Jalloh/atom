@@ -80,7 +80,7 @@ class Post(flask_db.Model):
 	title = CharField()
 	slug = CharField(unique=True)
 	published = BooleanField(default=False,index=True)
-	timestamp = DateTimeField(default=datetime.datetime.now, index=True)
+	timestamp = DateTimeField(default=datetime.datetime.utcnow, index=True)
 	content = TextField()
 	author = ForeignKeyField(User, related_name='posts')
 	
@@ -167,7 +167,7 @@ class Post(flask_db.Model):
 		words = [word.strip() for word in query.split() if word.strip()]
 		if not words:
 			# Return empty query.
-			return Post.select().where(Post.id == 0)
+			return Post.public().where(Post.id == 0)
 		else:
 			ids = []
 			posts = []
@@ -178,7 +178,9 @@ class Post(flask_db.Model):
 						pass
 					else:
 						ids.append(post_search.post_id)
-						posts.append(Post.get(id=post_search.post_id))
+						post = Post.get(id=post_search.post_id)
+						if post.published == True:
+							posts.append(post)
 	
 		return posts
 
@@ -213,14 +215,14 @@ class PostIndex(FTSModel):
 
 
 class Comment(flask_db.Model):
-	timestamp = DateTimeField(default=datetime.datetime.now, index=True)
+	timestamp = DateTimeField(default=datetime.datetime.utcnow, index=True)
 	content = TextField()
 	author = CharField()
 	post = ForeignKeyField(Post, related_name='comments')	
 	email = CharField(default='')
 
 	def avatar(self, size):
-		return 'http://www.gravatar.com/avatar/%s?d=identicon&s=%d' %( md5(self.email.encode('utf-8')).hexdigest(), size)
+		return 'https://secure.gravatar.com/avatar/%s?d=identicon&s=%d' %( md5(self.email.encode('utf-8')).hexdigest(), size)
 
 
 database.create_tables([ User, Post, PostIndex, Comment], safe=True)

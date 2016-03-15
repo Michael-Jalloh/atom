@@ -19,7 +19,7 @@ class ListView(MethodView):
 			max_page = PostIndex.max_post_page_all(search_query)
 		else:
 			max_page = Post.max_post_page_all()
-			posts = Post.select().order_by(Post.timestamp.desc()).paginate(page,POST_PER_PAGE)
+			posts = Post.public().order_by(Post.timestamp.desc()).paginate(page,POST_PER_PAGE)
 		return render_template('posts/list.html', posts=posts, page=page, max_page= max_page)
 
 
