@@ -85,8 +85,7 @@ class Post(flask_db.Model):
 	author = ForeignKeyField(User, related_name='posts')
 	
 	def save(self, *args, **kwargs):
-		if not self.slug:
-			self.slug = re.sub('[^\w]+', '-', self.title.lower())
+		self.slug = re.sub('[^\w]+', '-', self.title.lower())
 		ret = super(Post, self).save(*args, **kwargs)
 
 		# Store search content
