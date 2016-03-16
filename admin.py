@@ -12,7 +12,7 @@ class List(MethodView):
 	decorators = [login_required]
 
 	def get(self):
-		posts = current_user.posts
+		posts = current_user.posts.order_by(Post.timestamp.desc())
 		return render_template('admin/list.html', posts=posts)
 
 

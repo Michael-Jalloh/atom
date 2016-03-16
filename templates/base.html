@@ -31,7 +31,11 @@
 	<nav class="navbar navbar-inverse navbar-fixed-top">		
 		<div class="container">
 			<ul class="nav nav-pills">
-			   <li class="active"><h4><a href="/" ><span class="label label-primary"> Home</span></a></li>
+			   {% if current_user.is_authenticated %}
+			  <li class="active"><h4><a href="{{url_for('posts.posts') }}"><span class="label label-primary">Home</span></a></h4></li>
+			   {% else %}
+			   <li class="active"><h4><a href="/" ><span class="label label-primary"> Home</span></a></h4></li>
+			   {% endif %}
 			{% if current_user.is_authenticated %}
 			 	<li class="active"><h4><a href="{{ url_for('admin.index') }}"><span class="label label-primary">Admin</span></a></h4></li>
 				<li class="active"><h4><a href="{{ url_for('admin.create') }}"><span class="label label-primary">Create Post</span></a></h4></li>

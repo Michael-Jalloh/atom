@@ -5,7 +5,7 @@ from models import Post, Comment, PostIndex
 from wtfpeewee.orm import model_form
 from flask.ext.login import login_required
 from config import POST_PER_PAGE
-
+from flask.ext.login import login_required
 
 posts = Blueprint('posts',__name__, template_folder='templates')
 
@@ -16,11 +16,25 @@ class ListView(MethodView):
 		search_query = request.args.get('q')
 		if search_query:
 			posts = Post.search(search_query)
+			max_page = PostIndex.max_post_page_public(search_query)
+		else:
+			max_page = Post.max_post_page_public()
+			posts = Post.public().order_by(Post.timestamp.desc()).paginate(page,POST_PER_PAGE)
+		return render_template('posts/list.html', posts=posts, page=page, max_page= max_page)
+
+
+class AdminView(MethodView):
+	decorators =[login_required]
+
+	def get(self, page=1):
+		search_query = request.args.get('q')
+		if search_query:
+			posts = Post.search_all(search_query)
 			max_page = PostIndex.max_post_page_all(search_query)
 		else:
 			max_page = Post.max_post_page_all()
-			posts = Post.public().order_by(Post.timestamp.desc()).paginate(page,POST_PER_PAGE)
-		return render_template('posts/list.html', posts=posts, page=page, max_page= max_page)
+			posts = Post.select().order_by(Post.timestamp.desc()).paginate(page, POST_PER_PAGE)
+		return render_template('posts/list.html', posts=posts, page=page, max_page = max_page)
 
 
 class DetailView(MethodView):
@@ -59,6 +73,8 @@ class DetailView(MethodView):
 
 		return render_template('posts/detail.html', **context)
 
+
+
 class CommentDelete(MethodView):
 	decorators=[login_required]
 	
@@ -73,4 +89,5 @@ posts.add_url_rule('/', view_func=ListView.as_view('list'))
 posts.add_url_rule('/index/', view_func=ListView.as_view('index'))
 posts.add_url_rule('/<int:page>/', view_func=ListView.as_view('page'))
 posts.add_url_rule('/<slug>/', view_func=DetailView.as_view('detail'))
-posts.add_url_rule('/comment/delete/<slug>/<comment>/', view_func=CommentDelete.as_view('delete'))
+posts.add_url_rule('/comment/delete/<slug>/<comment>/', view_func=CommentDelete.as_view('delete'))	
+posts.add_url_rule('/posts/', view_func=AdminView.as_view('posts'))

@@ -184,6 +184,25 @@ class Post(flask_db.Model):
 	
 		return posts
 
+	@classmethod
+	def search_all(cls, query):
+		words = [word.strip() for word in query.split() if word.split()]
+		if not words:
+			# Return and empty query
+			return Post.select().where(Post.id == 0)
+		else:
+			ids = []
+			post = []
+			for word in words:
+				indexes = PostIndex.search(word)
+				for post_search in indexes:
+					if post_search.post_id in ids or post_search.post_id == None:
+						pass
+					else:
+						ids.append(post_search.post_id)
+						post = Post.get(id=post_search.post_id)
+						posts.append(post)
+		return posts
 
 class PostIndex(FTSModel):
 	post_id = IntegerField()
