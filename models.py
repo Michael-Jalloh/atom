@@ -20,6 +20,7 @@ class User(UserMixin, flask_db.Model):
 	password_hash = CharField()
 	admin = BooleanField(default=False)
 	about_me = TextField(default='')
+	
 
 	def avatar(self, size):
 				return 'https://secure.gravatar.com/avatar/%s?d=identicon&s=%d' %( md5(self.email.encode('utf-8')).hexdigest(), size)
@@ -83,6 +84,11 @@ class Post(flask_db.Model):
 	timestamp = DateTimeField(default=datetime.datetime.utcnow, index=True)
 	content = TextField()
 	author = ForeignKeyField(User, related_name='posts')
+	link = CharField(default='')
+
+        @property
+	def link_code(self):
+                return Markup(self.link)
 	
 	def save(self, *args, **kwargs):
 		self.slug = re.sub('[^\w]+', '-', self.title.lower())
