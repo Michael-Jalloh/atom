@@ -3,9 +3,9 @@ from flask.views import MethodView
 from playhouse.flask_utils import get_object_or_404
 from models import Post, Comment, PostIndex
 from wtfpeewee.orm import model_form
-from flask.ext.login import login_required
+from flask_login import login_required
 from config import POST_PER_PAGE
-from flask.ext.login import login_required
+#from flask.ext.login import login_required
 
 posts = Blueprint('posts',__name__, template_folder='templates')
 

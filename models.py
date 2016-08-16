@@ -7,7 +7,7 @@ from markdown import markdown
 from markdown.extensions.codehilite import CodeHiliteExtension
 from markdown.extensions.extra import ExtraExtension
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask.ext.login import UserMixin
+from flask_login import UserMixin
 from playhouse.sqlite_ext import *
 from atom import flask_db, database, login_manager, SITE_WIDTH
 from config import POST_PER_PAGE as ppp

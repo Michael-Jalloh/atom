@@ -3,7 +3,7 @@ import os, sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
-from flask.ext.script import Manager, Server, Command
+from flask_script import Manager, Server, Command
 from atom import application
 from manager import main_loop
 

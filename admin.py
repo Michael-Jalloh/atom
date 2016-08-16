@@ -1,6 +1,6 @@
 from flask import Blueprint, request, redirect, render_template, url_for
 from flask.views import MethodView
-from flask.ext.login import login_required, current_user
+from flask_login import login_required, current_user
 from wtfpeewee.orm import model_form
 from playhouse.flask_utils import get_object_or_404
 from models import Post, Comment, PostIndex
