@@ -35,7 +35,7 @@ class LoginView(MethodView):
 				user = User.get(User.username==form.username.data)
 				if user is not None and user.verify_password(form.password.data):
 					login_user(user, form.remember_me.data)
-					return redirect('admin')
+					return redirect(request.args.get('next') or url_for('admin.index'))
 			except User.DoesNotExist:
 				pass
 		return render_template('auth/login.html', form=form)	
